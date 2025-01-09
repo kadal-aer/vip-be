@@ -86,6 +86,7 @@ app.get('/', async (req, res) => {
     		success: true,
     		ip: await getIPAddress(),
     		uptime: runtime(os.uptime()),
+    		database: db.data ? 'Connected' : 'Disconnected,
     		status: obj
     })
 })
@@ -105,16 +106,22 @@ app.get('/data/:data', async (req, res) => {
 })
 
 
-app.get('/api/profile', async (req, res) => {
-    let { data } = await axios("https://vip-reseller.co.id/api/profile", {
-              method: "POST",
-              data: new URLSearchParams(
-                Object.entries({ key: db.data.config[1].vipreseller.key, sign: db.data.config[1].vipreseller.sign })
-              ),
-            })
-    res.json({
-    		success: false,
-    		data: data
-    })
-})
+app.all('/api/:objective', async (req, res) => {
+  const { method, params, body } = req;
+  try {
+    const axiosResponse = await axios({
+      url: 'https://vip-reseller.co.id/api/' + params.objective,
+      method: 'POST',
+      data: new URLSearchParams(
+                Object.entries(body)
+              )
+    });
+    res.status(axiosResponse.status).json(axiosResponse.data);
+  } catch (error) {
+    res.status(error.response?.status || 500).json({
+      error: error.message,
+      details: error.response?.data || null,
+    });
+  }
+});
 
