@@ -86,7 +86,7 @@ app.get('/', async (req, res) => {
     		success: true,
     		ip: await getIPAddress(),
     		uptime: runtime(os.uptime()),
-    		database: db.data ? 'Connected' : 'Disconnected,
+    		database: db.data ? 'Connected' : 'Disconnected',
     		status: obj
     })
 })
