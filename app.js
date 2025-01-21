@@ -6,7 +6,7 @@ const app = express()
 app.set('json spaces', 4)
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-const PORT =  process.env.SERVER_PORT || 3000
+const PORT =  process.env.SERVER_PORT || 3002
 app.listen(PORT, async () => {
 console.log('App running on port', PORT)
 })
